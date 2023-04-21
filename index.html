@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/android-chrome-512x512.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7 y 1/2 Juego de Cartas</title>
+  </head>
+  <body>
+    <div id="game" class="game flow">
+      <h1>Juego de las siete y media</h1>
+      <div class="game__img">
+        <div class="game__card">
+          <img src="/back.jpg" alt="dorso de una carta" />
+          <div class="card__transition" id="card-transition">
+            <div class="card card--verso">
+              <img src="/back.jpg" alt="" class="card__new" id="prueba" />
+            </div>
+            <div class="card">
+              <img src="/back.jpg" alt="dorso de una carta" />
+            </div>
+          </div>
+        </div>
+        <div class="game__baraja">
+          <img src="" alt="" id="card-prev" />
+        </div>
+      </div>
+      <div class="game__action flow">
+        <h2 class="game__display">
+          Llevas: <span class="game__score" id="score">sds</span>
+        </h2>
+        <div class="game__buttons">
+          <button id="stand" class="btn--stand">Me planto</button>
+          <button id="add-card">Pedir carta</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
