@@ -2,7 +2,12 @@ import './style.css';
 
 /* 1. Mostrar puntuación*/
 /* 2. Pedir carta*/
-const scoreValue: number = 0;
+/* 3. Sumar puntuación */
+/* 4. Game over */
+/* 5. Mensaje */
+// Game over
+// Si el usuario se pasa de 7,5 puntos, el juego termina y se muestra un mensaje de Game Over, además el usuario no puede seguir pidiendo cartas.
+let scoreValue: number = 0;
 
 const showScore = (): void => {
   const score = document.getElementById('score');
@@ -69,24 +74,59 @@ const showCard = (num: number) => {
     imgCard.src = url;
   }
 };
-
-const giveMeCard = () => {
-  const newNumber: number = randomNumber(1, 10);
-  console.log(newNumber);
-  if (newNumber > 7) {
-    showCard(newNumber + 2);
-  } else {
-    showCard(newNumber);
+const mensaje = (numero: number) => {
+  let mensaje: string = '';
+  switch (true) {
+    case numero < 5:
+      mensaje = 'Has sido muy conservador';
+      break;
+    case numero >= 5 && numero < 6:
+      mensaje = 'Te ha entrado el canguelo eh?';
+      break;
+    case numero >= 6 && numero <= 7:
+      mensaje = 'Casi casí...';
+      break;
+    case numero === 7.5:
+      mensaje = '¡Lo has clavado! ¡Enohorabuena!🎉🎉';
+      break;
+    case numero > 7.5:
+      mensaje = 'Te has pasado. Game Over';
+      break;
   }
-
-  //mio
-  document.getElementById('card-transition')?.classList.add('active');
-  const addCard = document.getElementById('add-card');
-  if (addCard && addCard instanceof HTMLButtonElement) {
-    addCard.disabled = true;
+  const solution = document.getElementById('solution');
+  if (solution) {
+    solution.innerHTML = mensaje;
   }
 };
 
+const gameOver = (num: number) => {
+  if (num > 7.5) {
+    mensaje(num);
+  }
+};
+
+const giveMeCard = () => {
+  let newNumber: number = randomNumber(1, 10);
+  console.log(newNumber);
+  if (newNumber > 7) {
+    showCard(newNumber + 2);
+    newNumber = 0.5;
+  } else {
+    showCard(newNumber);
+  }
+  scoreValue = scoreValue + newNumber;
+  showScore();
+
+  //gameover
+  gameOver(scoreValue);
+
+  //mio
+  document.getElementById('card-transition')?.classList.add('active');
+
+  btnDisabled(document.getElementById('add-card'));
+};
+
+//mio
 const transitionEnd = () => {
   document.getElementById('card-transition')?.classList.remove('active');
   const imgCard = document.getElementById('prueba');
@@ -100,20 +140,65 @@ const transitionEnd = () => {
   ) {
     imgCardRes.src = imgCard.src;
   }
+
+  btnEnabled(document.getElementById('add-card'));
+};
+
+//mio apagar boton
+const btnDisabled = (btn: HTMLElement | null): void => {
+  if (btn && btn instanceof HTMLButtonElement) {
+    btn.disabled = true;
+  } else {
+    console.error(`btnDisabled: no encuentra el <button> con id ${btn?.id} `);
+  }
+};
+
+//mio encender boton
+const btnEnabled = (btn: HTMLElement | null): void => {
+  if (btn && btn instanceof HTMLButtonElement) {
+    btn.disabled = false;
+  } else {
+    console.error(`btnEnabled: no encuentra el <button> con id ${btn?.id} `);
+  }
+};
+
+const stand = () => {
+  mensaje(scoreValue);
+
+  //Esto se repite en game over
   const addCard = document.getElementById('add-card');
-  if (addCard && addCard instanceof HTMLButtonElement) {
-    addCard.disabled = false;
+  const standBtn = document.getElementById('stand');
+  if (addCard) {
+    addCard.style.display = 'none';
+  }
+  if (standBtn) {
+    standBtn.style.display = 'none';
   }
 };
 
 document.addEventListener('DOMContentLoaded', showScore);
 
-//mio
-
 const addCard = document.getElementById('add-card');
+const standBtn = document.getElementById('stand');
 
 addCard?.addEventListener('click', () => {
   giveMeCard();
-  const cardTransition = document.getElementById('card-transition');
-  cardTransition?.addEventListener('transitionend', transitionEnd);
+  //mio
+  document
+    .getElementById('card-transition')
+    ?.addEventListener('transitionend', transitionEnd);
 });
+standBtn?.addEventListener('click', stand);
+// if (addCard) {
+//   addCard.addEventListener('click', () => {
+//     giveMeCard();
+//     const cardTransition = document.getElementById('card-transition');
+//     if (cardTransition) {
+//       cardTransition.addEventListener('transitionend', transitionEnd);
+//     } else {
+//       console.error('no se encuentra el elemento con id card-transition');
+//     }
+//   });
+// } else {
+//   console.error('no se encuentra el elemento con id add-card');
+// }

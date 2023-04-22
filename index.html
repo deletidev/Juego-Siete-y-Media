@@ -21,30 +21,37 @@
   </head>
   <body>
     <div id="game" class="game flow">
-      <h1>Juego de las siete y media</h1>
-      <div class="game__img">
-        <div class="game__card">
-          <img src="/back.jpg" alt="dorso de una carta" />
-          <div class="card__transition" id="card-transition">
-            <div class="card card--verso">
-              <img src="/back.jpg" alt="" class="card__new" id="prueba" />
-            </div>
-            <div class="card">
-              <img src="/back.jpg" alt="dorso de una carta" />
+      <div class="game__main flow">
+        <h1>Juego de las siete y media</h1>
+        <div class="game__img">
+          <div class="game__card">
+            <img src="/back.jpg" alt="dorso de una carta" />
+            <div class="card__transition" id="card-transition">
+              <div class="card card--verso">
+                <img src="/back.jpg" alt="" class="card__new" id="prueba" />
+              </div>
+              <div class="card">
+                <img src="/back.jpg" alt="dorso de una carta" />
+              </div>
             </div>
           </div>
+          <div class="game__baraja">
+            <img src="" alt="" id="card-prev" />
+          </div>
         </div>
-        <div class="game__baraja">
-          <img src="" alt="" id="card-prev" />
-        </div>
-      </div>
-      <div class="game__action flow">
+
         <h2 class="game__display">
           Llevas: <span class="game__score" id="score">sds</span>
         </h2>
+        <h2 id="solution" class="game__display oculto">
+          ¡Lo has clavado! ¡Enohorabuena!🎉🎉
+        </h2>
+      </div>
+      <div class="game__action">
         <div class="game__buttons">
           <button id="stand" class="btn--stand">Me planto</button>
           <button id="add-card">Pedir carta</button>
+          <button disabled class="btn--hiden">Nueva partida</button>
         </div>
       </div>
     </div>
