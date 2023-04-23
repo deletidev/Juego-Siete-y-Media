@@ -70,7 +70,7 @@ const showCard = (num: number) => {
       break;
   }
 
-  const imgCard = document.getElementById('prueba');
+  const imgCard = document.getElementById('card-new');
 
   if (imgCard && imgCard instanceof HTMLImageElement) {
     imgCard.src = url;
@@ -98,10 +98,11 @@ const mensaje = (numero: number) => {
   }
   const solution = document.getElementById('solution');
   if (solution) {
-    solution.classList.remove('game__display--oculto');
+    solution.classList.remove('display--opacity');
     solution.innerHTML = mensaje;
   }
 };
+
 //GameOVER
 const gameOver = (num: number) => {
   if (num > 7.5) {
@@ -136,15 +137,19 @@ const giveMeCard = () => {
   gameOver(scoreValue);
 
   //mio
-  document.getElementById('card-transition')?.classList.add('active');
+  document
+    .getElementById('card-transition')
+    ?.classList.add('card__transition--move');
 
   btnDisabled(document.getElementById('add-card'));
 };
 
 //mio- Termina la transición
 const transitionEnd = () => {
-  document.getElementById('card-transition')?.classList.remove('active');
-  const imgCard = document.getElementById('prueba');
+  document
+    .getElementById('card-transition')
+    ?.classList.remove('card__transition--move');
+  const imgCard = document.getElementById('card-new');
   const imgCardRes = document.getElementById('card-prev');
 
   if (
@@ -155,7 +160,7 @@ const transitionEnd = () => {
   ) {
     imgCardRes.src = imgCard.src;
 
-    imgCardRes.classList.remove('game__display--oculto');
+    imgCardRes.classList.remove('card--opacity');
   }
 
   btnEnabled(document.getElementById('add-card'));
@@ -207,18 +212,21 @@ const newGame = () => {
   btnToggle(document.getElementById('add-card'));
   btnToggle(document.getElementById('stand'));
   btnToggle(document.getElementById('new-game'));
+
   const nextMoveBtn = document.getElementById('next-move');
   if (nextMoveBtn && !nextMoveBtn.classList.contains('btn--hiden')) {
     btnToggle(document.getElementById('next-move'));
   }
+
   scoreValue = 0;
   showScore();
+
   const solution = document.getElementById('solution');
   if (solution) {
-    solution.classList.add('game__display--oculto');
+    solution.classList.add('display--opacity');
   }
   const imgCardRes = document.getElementById('card-prev');
-  imgCardRes?.classList.add('game__display--oculto');
+  imgCardRes?.classList.add('card--opacity');
 };
 
 document.addEventListener('DOMContentLoaded', showScore);

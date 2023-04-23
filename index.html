@@ -21,51 +21,41 @@
   </head>
   <body>
     <div id="game" class="game flow">
+      <h1 class="game__header">Juego de las siete y media</h1>
       <div class="game__main flow">
-        <h1>Juego de las siete y media</h1>
-        <div class="game__img">
-          <div class="game__card">
+        <div class="cards">
+          <div class="card__deck">
             <img src="/back.jpg" alt="dorso de una carta" />
             <div class="card__transition" id="card-transition">
-              <div class="card card--verso">
-                <img src="/back.jpg" alt="" class="card__new" id="prueba" />
+              <div class="card__img card__img--front">
+                <img src="/back.jpg" alt="" class="card__new" id="card-new" />
               </div>
-              <div class="card">
+              <div class="card__img">
                 <img src="/back.jpg" alt="dorso de una carta" />
               </div>
             </div>
           </div>
-          <div class="game__baraja">
-            <img
-              src="/back.jpg"
-              alt=""
-              id="card-prev"
-              class="game__display--oculto"
-            />
+          <div class="card__place">
+            <img src="/back.jpg" alt="" id="card-prev" class="card--opacity" />
           </div>
         </div>
 
-        <h2 class="game__display">
-          Llevas: <span class="game__score" id="score">sds</span>
+        <h2 class="display">
+          Llevas: <span id="score" class="display--score">sds</span>
         </h2>
-        <h2
-          id="solution"
-          class="game__display game__display--oculto game__display--solution"
-        >
+        <h2 id="solution" class="display display--solution display--opacity">
           ¡Lo has clavado! ¡Enhorabuena!🎉🎉
         </h2>
       </div>
       <div class="game__action">
-        <div class="game__buttons">
-          <button id="stand" class="btn--stand">Me planto</button>
-          <button id="add-card">Pedir carta</button>
-          <button id="next-move" class="btn--new btn--hiden">
-            ¿Y si hubieses pedido carta?
-          </button>
-          <button id="new-game" class="btn--new btn--hiden">
-            Nueva partida
-          </button>
-        </div>
+        <button id="stand" class="btn btn--secondary">Me planto</button>
+        <button id="add-card" class="btn btn--primary">Pedir carta</button>
+        <button id="next-move" class="btn btn--secondary btn--hiden">
+          ¿Y si hubieses pedido carta?
+        </button>
+        <button id="new-game" class="btn btn--primary btn--center btn--hiden">
+          Nueva partida
+        </button>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
