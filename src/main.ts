@@ -9,6 +9,7 @@ import './style.css';
 // Si el usuario se pasa de 7,5 puntos, el juego termina y se muestra un mensaje de Game Over, además el usuario no puede seguir pidiendo cartas.
 let scoreValue: number = 0;
 
+//Contador
 const showScore = (): void => {
   const score = document.getElementById('score');
   if (score) {
@@ -21,6 +22,7 @@ const showScore = (): void => {
 const randomNumber = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
+//Carta
 const showCard = (num: number) => {
   let url: string = '';
   switch (num) {
@@ -74,6 +76,7 @@ const showCard = (num: number) => {
     imgCard.src = url;
   }
 };
+//Mensaje
 const mensaje = (numero: number) => {
   let mensaje: string = '';
   switch (true) {
@@ -87,7 +90,7 @@ const mensaje = (numero: number) => {
       mensaje = 'Casi casí...';
       break;
     case numero === 7.5:
-      mensaje = '¡Lo has clavado! ¡Enohorabuena!🎉🎉';
+      mensaje = '¡Lo has clavado! ¡Enhorabuena!🎉🎉';
       break;
     case numero > 7.5:
       mensaje = 'Te has pasado. Game Over';
@@ -99,7 +102,7 @@ const mensaje = (numero: number) => {
     solution.innerHTML = mensaje;
   }
 };
-
+//GameOVER
 const gameOver = (num: number) => {
   if (num > 7.5) {
     mensaje(num);
@@ -109,9 +112,14 @@ const gameOver = (num: number) => {
     btnToggle(document.getElementById('add-card'));
     btnToggle(document.getElementById('stand'));
     btnToggle(document.getElementById('new-game'));
+    const nextMoveBtn = document.getElementById('next-move');
+    if (nextMoveBtn && !nextMoveBtn.classList.contains('btn--hiden')) {
+      btnToggle(document.getElementById('next-move'));
+    }
   }
 };
 
+//Dar carta
 const giveMeCard = () => {
   let newNumber: number = randomNumber(1, 10);
   console.log(newNumber);
@@ -133,7 +141,7 @@ const giveMeCard = () => {
   btnDisabled(document.getElementById('add-card'));
 };
 
-//mio
+//mio- Termina la transición
 const transitionEnd = () => {
   document.getElementById('card-transition')?.classList.remove('active');
   const imgCard = document.getElementById('prueba');
@@ -146,6 +154,8 @@ const transitionEnd = () => {
     imgCardRes instanceof HTMLImageElement
   ) {
     imgCardRes.src = imgCard.src;
+
+    imgCardRes.classList.remove('game__display--oculto');
   }
 
   btnEnabled(document.getElementById('add-card'));
@@ -179,6 +189,7 @@ const btnToggle = (btn: HTMLElement | null): void => {
   }
 };
 
+//Me planto
 const stand = () => {
   mensaje(scoreValue);
 
@@ -186,12 +197,20 @@ const stand = () => {
   btnToggle(document.getElementById('add-card'));
   btnToggle(document.getElementById('stand'));
   btnToggle(document.getElementById('new-game'));
-  // btnHiden();
+  if (scoreValue !== 7.5) {
+    btnToggle(document.getElementById('next-move'));
+  }
 };
+
+//Nueva partida
 const newGame = () => {
   btnToggle(document.getElementById('add-card'));
   btnToggle(document.getElementById('stand'));
   btnToggle(document.getElementById('new-game'));
+  const nextMoveBtn = document.getElementById('next-move');
+  if (nextMoveBtn && !nextMoveBtn.classList.contains('btn--hiden')) {
+    btnToggle(document.getElementById('next-move'));
+  }
   scoreValue = 0;
   showScore();
   const solution = document.getElementById('solution');
@@ -199,16 +218,15 @@ const newGame = () => {
     solution.classList.add('game__display--oculto');
   }
   const imgCardRes = document.getElementById('card-prev');
-
-  if (imgCardRes && imgCardRes instanceof HTMLImageElement) {
-    imgCardRes.src = '';
-  }
+  imgCardRes?.classList.add('game__display--oculto');
 };
+
 document.addEventListener('DOMContentLoaded', showScore);
 
 const addCard = document.getElementById('add-card');
 const standBtn = document.getElementById('stand');
 const newGameBtn = document.getElementById('new-game');
+const nextMoveBtn = document.getElementById('next-move');
 
 addCard?.addEventListener('click', () => {
   giveMeCard();
@@ -222,6 +240,18 @@ standBtn?.addEventListener('click', stand);
 
 //depende de la transicion, tema carta que vuelve
 newGameBtn?.addEventListener('click', newGame);
+
+//
+nextMoveBtn?.addEventListener('click', () => {
+  giveMeCard();
+  //mio
+  document
+    .getElementById('card-transition')
+    ?.addEventListener('transitionend', transitionEnd);
+  mensaje(scoreValue);
+  gameOver(scoreValue);
+});
+
 // if (addCard) {
 //   addCard.addEventListener('click', () => {
 //     giveMeCard();
