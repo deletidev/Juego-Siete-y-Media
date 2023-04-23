@@ -1,12 +1,5 @@
 import './style.css';
 
-/* 1. Mostrar puntuación*/
-/* 2. Pedir carta*/
-/* 3. Sumar puntuación */
-/* 4. Game over */
-/* 5. Mensaje */
-// Game over
-// Si el usuario se pasa de 7,5 puntos, el juego termina y se muestra un mensaje de Game Over, además el usuario no puede seguir pidiendo cartas.
 let scoreValue: number = 0;
 
 //Contador
@@ -122,14 +115,17 @@ const gameOver = (num: number) => {
 
 //Dar carta
 const giveMeCard = () => {
+  //número aleatorio
   let newNumber: number = randomNumber(1, 10);
-  console.log(newNumber);
+  // console.log(newNumber);
+
   if (newNumber > 7) {
     showCard(newNumber + 2);
     newNumber = 0.5;
   } else {
     showCard(newNumber);
   }
+
   scoreValue = scoreValue + newNumber;
   showScore();
 
