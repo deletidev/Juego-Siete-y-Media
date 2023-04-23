@@ -95,6 +95,7 @@ const mensaje = (numero: number) => {
   }
   const solution = document.getElementById('solution');
   if (solution) {
+    solution.classList.remove('game__display--oculto');
     solution.innerHTML = mensaje;
   }
 };
@@ -102,6 +103,12 @@ const mensaje = (numero: number) => {
 const gameOver = (num: number) => {
   if (num > 7.5) {
     mensaje(num);
+    // btnHiden();
+    // const addCard = document.getElementById('add-card');
+    // const standBtn = document.getElementById('stand');
+    btnToggle(document.getElementById('add-card'));
+    btnToggle(document.getElementById('stand'));
+    btnToggle(document.getElementById('new-game'));
   }
 };
 
@@ -162,24 +169,46 @@ const btnEnabled = (btn: HTMLElement | null): void => {
   }
 };
 
+//mostrar u ocultar botones
+const btnToggle = (btn: HTMLElement | null): void => {
+  if (btn) {
+    btn.classList.toggle('btn--hiden');
+  } else {
+    //error
+    console.error(`btnHiden: no encuentra el <button> con id ${btn} `);
+  }
+};
+
 const stand = () => {
   mensaje(scoreValue);
 
   //Esto se repite en game over
-  const addCard = document.getElementById('add-card');
-  const standBtn = document.getElementById('stand');
-  if (addCard) {
-    addCard.style.display = 'none';
+  btnToggle(document.getElementById('add-card'));
+  btnToggle(document.getElementById('stand'));
+  btnToggle(document.getElementById('new-game'));
+  // btnHiden();
+};
+const newGame = () => {
+  btnToggle(document.getElementById('add-card'));
+  btnToggle(document.getElementById('stand'));
+  btnToggle(document.getElementById('new-game'));
+  scoreValue = 0;
+  showScore();
+  const solution = document.getElementById('solution');
+  if (solution) {
+    solution.classList.add('game__display--oculto');
   }
-  if (standBtn) {
-    standBtn.style.display = 'none';
+  const imgCardRes = document.getElementById('card-prev');
+
+  if (imgCardRes && imgCardRes instanceof HTMLImageElement) {
+    imgCardRes.src = '';
   }
 };
-
 document.addEventListener('DOMContentLoaded', showScore);
 
 const addCard = document.getElementById('add-card');
 const standBtn = document.getElementById('stand');
+const newGameBtn = document.getElementById('new-game');
 
 addCard?.addEventListener('click', () => {
   giveMeCard();
@@ -188,7 +217,11 @@ addCard?.addEventListener('click', () => {
     .getElementById('card-transition')
     ?.addEventListener('transitionend', transitionEnd);
 });
+
 standBtn?.addEventListener('click', stand);
+
+//depende de la transicion, tema carta que vuelve
+newGameBtn?.addEventListener('click', newGame);
 // if (addCard) {
 //   addCard.addEventListener('click', () => {
 //     giveMeCard();
