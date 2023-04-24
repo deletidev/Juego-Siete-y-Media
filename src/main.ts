@@ -1,6 +1,13 @@
 import './style.css';
 
+//Puntuación
 let scoreValue: number = 0;
+type States =
+  | 'LESS_THAN_FOUR'
+  | 'BETWEEN_FOUR_AND_SIX'
+  | 'BETWEEN_SIX_AND_SEVEN'
+  | 'SEVEN_AND_A_HALF'
+  | 'GAME_OVER';
 
 //Contador
 const showScore = (): void => {
@@ -12,6 +19,7 @@ const showScore = (): void => {
   }
 };
 
+//Numero aleatorio
 const randomNumber = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -69,47 +77,68 @@ const showCard = (num: number) => {
     imgCard.src = url;
   }
 };
+
 //Mensaje
-const mensaje = (numero: number) => {
+// ?comprobar el numero
+const checkNumber = (numero: number) => {
+  if (numero < 4) {
+    return 'LESS_THAN_FOUR';
+  }
+  if (numero >= 4 && numero < 6) {
+    return 'BETWEEN_FOUR_AND_SIX';
+  }
+  if (numero >= 6 && numero <= 7) {
+    return 'BETWEEN_SIX_AND_SEVEN';
+  }
+  if (numero === 7.5) {
+    return 'SEVEN_AND_A_HALF';
+  }
+  if (numero > 7.5) {
+    return 'GAME_OVER';
+  }
+  return 'GAME_OVER';
+};
+
+// muestraMensajeDeComprobacion
+const showMessage = (state: States): void => {
   let mensaje: string = '';
-  switch (true) {
-    case numero < 5:
+
+  switch (state) {
+    case 'LESS_THAN_FOUR':
       mensaje = 'Has sido muy conservador';
       break;
-    case numero >= 5 && numero < 6:
+    case 'BETWEEN_FOUR_AND_SIX':
       mensaje = 'Te ha entrado el canguelo eh?';
       break;
-    case numero >= 6 && numero <= 7:
+    case 'BETWEEN_SIX_AND_SEVEN':
       mensaje = 'Casi casí...';
       break;
-    case numero === 7.5:
+    case 'SEVEN_AND_A_HALF':
       mensaje = '¡Lo has clavado! ¡Enhorabuena!🎉🎉';
       break;
-    case numero > 7.5:
-      mensaje = 'Te has pasado. Game Over';
+    case 'GAME_OVER':
+      mensaje = 'Te has pasado.</br> Game Over';
       break;
   }
+
   const solution = document.getElementById('solution');
+
   if (solution) {
-    solution.classList.remove('display--opacity');
+    solution.classList.add('display--opacity');
     solution.innerHTML = mensaje;
+  } else {
+    console.error('showMessage: no encuentra el elemento con id solution');
   }
 };
 
 //GameOVER
 const gameOver = (num: number) => {
   if (num > 7.5) {
-    mensaje(num);
-    // btnHiden();
-    // const addCard = document.getElementById('add-card');
-    // const standBtn = document.getElementById('stand');
-    btnToggle(document.getElementById('add-card'));
-    btnToggle(document.getElementById('stand'));
-    btnToggle(document.getElementById('new-game'));
-    const nextMoveBtn = document.getElementById('next-move');
-    if (nextMoveBtn && !nextMoveBtn.classList.contains('btn--hiden')) {
-      btnToggle(document.getElementById('next-move'));
-    }
+    const state: States = checkNumber(scoreValue);
+    showMessage(state);
+    mostrarBtnId('new-game');
+    ocultarBtnId('add-card');
+    ocultarBtnId('stand');
   }
 };
 
@@ -117,7 +146,6 @@ const gameOver = (num: number) => {
 const giveMeCard = () => {
   //número aleatorio
   let newNumber: number = randomNumber(1, 10);
-  // console.log(newNumber);
 
   if (newNumber > 7) {
     showCard(newNumber + 2);
@@ -132,12 +160,13 @@ const giveMeCard = () => {
   //gameover
   gameOver(scoreValue);
 
-  //mio
+  // mio
   document
     .getElementById('card-transition')
     ?.classList.add('card__transition--move');
 
-  btnDisabled(document.getElementById('add-card'));
+  btnDisabled('add-card');
+  btnDisabled('new-game');
 };
 
 //mio- Termina la transición
@@ -145,6 +174,7 @@ const transitionEnd = () => {
   document
     .getElementById('card-transition')
     ?.classList.remove('card__transition--move');
+
   const imgCard = document.getElementById('card-new');
   const imgCardRes = document.getElementById('card-prev');
 
@@ -159,67 +189,78 @@ const transitionEnd = () => {
     imgCardRes.classList.remove('card--opacity');
   }
 
-  btnEnabled(document.getElementById('add-card'));
+  btnEnabled('add-card');
+  btnEnabled('new-game');
 };
 
-//mio apagar boton
-const btnDisabled = (btn: HTMLElement | null): void => {
+//mio apagar boton por la transición
+const btnDisabled = (id: string): void => {
+  const btn = document.getElementById(id);
   if (btn && btn instanceof HTMLButtonElement) {
     btn.disabled = true;
   } else {
-    console.error(`btnDisabled: no encuentra el <button> con id ${btn?.id} `);
+    console.error(`btnEnabled: No encuentra el <button> con id ${id}`);
   }
 };
 
-//mio encender boton
-const btnEnabled = (btn: HTMLElement | null): void => {
+//mio encender boton por la transición
+const btnEnabled = (id: string): void => {
+  const btn = document.getElementById(id);
   if (btn && btn instanceof HTMLButtonElement) {
     btn.disabled = false;
   } else {
-    console.error(`btnEnabled: no encuentra el <button> con id ${btn?.id} `);
+    console.error(`btnEnabled: No encuentra el <button> con id ${id}`);
   }
 };
 
-//mostrar u ocultar botones
-const btnToggle = (btn: HTMLElement | null): void => {
-  if (btn) {
-    btn.classList.toggle('btn--hiden');
+//mostrar Boton
+const mostrarBtnId = (id: string): void => {
+  const btn = document.getElementById(id);
+  if (btn && btn instanceof HTMLButtonElement) {
+    btn.classList.remove('btn--hiden');
   } else {
-    //error
-    console.error(`btnHiden: no encuentra el <button> con id ${btn} `);
+    console.error(`mostrarBtnId: No encuentra el <button> con id ${id}`);
   }
 };
 
-//Me planto
-const stand = () => {
-  mensaje(scoreValue);
+//Ocultar Boton
+const ocultarBtnId = (id: string): void => {
+  const btn = document.getElementById(id);
+  if (btn && btn instanceof HTMLButtonElement) {
+    btn.classList.add('btn--hiden');
+  } else {
+    console.error(`ocultarBtnId: No encuentra el <button> con id ${id}`);
+  }
+};
 
-  //Esto se repite en game over
-  btnToggle(document.getElementById('add-card'));
-  btnToggle(document.getElementById('stand'));
-  btnToggle(document.getElementById('new-game'));
-  if (scoreValue !== 7.5) {
-    btnToggle(document.getElementById('next-move'));
+// Me planto
+const stand = () => {
+  const state: States = checkNumber(scoreValue);
+  showMessage(state);
+
+  mostrarBtnId('new-game');
+  mostrarBtnId('next-move');
+  ocultarBtnId('add-card');
+  ocultarBtnId('stand');
+  if (scoreValue === 7.5) {
+    ocultarBtnId('next-move');
   }
 };
 
 //Nueva partida
 const newGame = () => {
-  btnToggle(document.getElementById('add-card'));
-  btnToggle(document.getElementById('stand'));
-  btnToggle(document.getElementById('new-game'));
-
-  const nextMoveBtn = document.getElementById('next-move');
-  if (nextMoveBtn && !nextMoveBtn.classList.contains('btn--hiden')) {
-    btnToggle(document.getElementById('next-move'));
-  }
+  ocultarBtnId('new-game');
+  mostrarBtnId('add-card');
+  mostrarBtnId('stand');
+  btnEnabled('next-move');
+  ocultarBtnId('next-move');
 
   scoreValue = 0;
   showScore();
 
   const solution = document.getElementById('solution');
   if (solution) {
-    solution.classList.add('display--opacity');
+    solution.classList.remove('display--opacity');
   }
   const imgCardRes = document.getElementById('card-prev');
   imgCardRes?.classList.add('card--opacity');
@@ -232,40 +273,32 @@ const standBtn = document.getElementById('stand');
 const newGameBtn = document.getElementById('new-game');
 const nextMoveBtn = document.getElementById('next-move');
 
-addCard?.addEventListener('click', () => {
-  giveMeCard();
-  //mio
-  document
-    .getElementById('card-transition')
-    ?.addEventListener('transitionend', transitionEnd);
-});
+if (addCard && addCard instanceof HTMLButtonElement) {
+  addCard.addEventListener('click', () => {
+    giveMeCard();
+    //mio
 
-standBtn?.addEventListener('click', stand);
+    document
+      .getElementById('card-transition')
+      ?.addEventListener('transitionend', transitionEnd);
+  });
+}
 
-//depende de la transicion, tema carta que vuelve
-newGameBtn?.addEventListener('click', newGame);
+if (standBtn && standBtn instanceof HTMLButtonElement) {
+  standBtn.addEventListener('click', stand);
+}
 
-//
-nextMoveBtn?.addEventListener('click', () => {
-  giveMeCard();
-  //mio
-  document
-    .getElementById('card-transition')
-    ?.addEventListener('transitionend', transitionEnd);
-  mensaje(scoreValue);
-  gameOver(scoreValue);
-});
+if (newGameBtn && newGameBtn instanceof HTMLButtonElement) {
+  newGameBtn.addEventListener('click', newGame);
+}
 
-// if (addCard) {
-//   addCard.addEventListener('click', () => {
-//     giveMeCard();
-//     const cardTransition = document.getElementById('card-transition');
-//     if (cardTransition) {
-//       cardTransition.addEventListener('transitionend', transitionEnd);
-//     } else {
-//       console.error('no se encuentra el elemento con id card-transition');
-//     }
-//   });
-// } else {
-//   console.error('no se encuentra el elemento con id add-card');
-// }
+if (nextMoveBtn && nextMoveBtn instanceof HTMLButtonElement) {
+  nextMoveBtn.addEventListener('click', () => {
+    giveMeCard();
+
+    //no se si activar o no que se actualice el mensaje o poner un mensaje nuevo
+    // const state: States = checkNumber(scoreValue);
+    // showMessage(state);
+    btnDisabled('next-move');
+  });
+}
