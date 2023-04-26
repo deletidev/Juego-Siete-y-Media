@@ -7,7 +7,8 @@ type States =
   | 'BETWEEN_FOUR_AND_SIX'
   | 'BETWEEN_SIX_AND_SEVEN'
   | 'SEVEN_AND_A_HALF'
-  | 'GAME_OVER';
+  | 'GAME_OVER'
+  | 'IMPOSIBLE';
 
 //Contador
 const showScore = (): void => {
@@ -75,11 +76,13 @@ const showCard = (num: number) => {
 
   if (imgCard && imgCard instanceof HTMLImageElement) {
     imgCard.src = url;
+  } else {
+    console.error('No se ha encontrado la imagen con id card-new');
   }
 };
 
 //Mensaje
-// ?comprobar el numero
+//comprobar el numero
 const checkNumber = (numero: number): States => {
   if (numero < 4) {
     return 'LESS_THAN_FOUR';
@@ -96,7 +99,7 @@ const checkNumber = (numero: number): States => {
   if (numero > 7.5) {
     return 'GAME_OVER';
   }
-  return 'GAME_OVER';
+  return 'IMPOSIBLE';
 };
 
 // muestraMensajeDeComprobacion
@@ -118,6 +121,12 @@ const showMessage = (state: States): void => {
       break;
     case 'GAME_OVER':
       mensaje = 'Te has pasado.</br> Game Over';
+      break;
+    case 'IMPOSIBLE':
+      mensaje = `¿No hay numero?`;
+      break;
+    default:
+      mensaje = `No sé cómo has llegado aquí`;
       break;
   }
 
@@ -147,6 +156,7 @@ const giveMeCard = () => {
   //número aleatorio
   let newNumber: number = randomNumber(1, 10);
 
+  //mostrar carta
   if (newNumber > 7) {
     showCard(newNumber + 2);
     newNumber = 0.5;
@@ -161,9 +171,13 @@ const giveMeCard = () => {
   gameOver(scoreValue);
 
   // mio
-  document
-    .getElementById('card-transition')
-    ?.classList.add('card__transition--move');
+  const transitionElement = document.getElementById('card-transition');
+
+  if (transitionElement) {
+    transitionElement.classList.add('card__transition--move');
+  } else {
+    console.error('No se encuentra el elemento con id card-transition');
+  }
 
   btnDisabled('add-card');
   btnDisabled('new-game');
@@ -171,9 +185,13 @@ const giveMeCard = () => {
 
 //mio- Termina la transición
 const transitionEnd = () => {
-  document
-    .getElementById('card-transition')
-    ?.classList.remove('card__transition--move');
+  const transitionElement = document.getElementById('card-transition');
+
+  if (transitionElement) {
+    transitionElement.classList.remove('card__transition--move');
+  } else {
+    console.error('No se encuentra el elemento con id card-transition');
+  }
 
   const imgCard = document.getElementById('card-new');
   const imgCardRes = document.getElementById('card-prev');
@@ -187,6 +205,8 @@ const transitionEnd = () => {
     imgCardRes.src = imgCard.src;
 
     imgCardRes.classList.remove('card--opacity');
+  } else {
+    console.error('No se encuentra el elemento con id card-new o card-prev');
   }
 
   btnEnabled('add-card');
@@ -242,6 +262,7 @@ const stand = () => {
   btnShow('next-move');
   btnHiden('add-card');
   btnHiden('stand');
+
   if (scoreValue === 7.5) {
     btnHiden('next-move');
   }
@@ -250,10 +271,10 @@ const stand = () => {
 //Nueva partida
 const newGame = () => {
   btnHiden('new-game');
+  btnHiden('next-move');
   btnShow('add-card');
   btnShow('stand');
   btnEnabled('next-move');
-  btnHiden('next-move');
 
   scoreValue = 0;
   showScore();
@@ -261,9 +282,15 @@ const newGame = () => {
   const solution = document.getElementById('solution');
   if (solution) {
     solution.classList.remove('display--opacity');
+  } else {
+    console.error('No se ha encontrado el elemento con id solution');
   }
   const imgCardRes = document.getElementById('card-prev');
-  imgCardRes?.classList.add('card--opacity');
+  if (imgCardRes) {
+    imgCardRes.classList.add('card--opacity');
+  } else {
+    console.error('No se ha encontrado el elemento con id card-prev');
+  }
 };
 
 document.addEventListener('DOMContentLoaded', showScore);
@@ -276,11 +303,14 @@ const nextMoveBtn = document.getElementById('next-move');
 if (addCard && addCard instanceof HTMLButtonElement) {
   addCard.addEventListener('click', () => {
     giveMeCard();
-    //mio
 
-    document
-      .getElementById('card-transition')
-      ?.addEventListener('transitionend', transitionEnd);
+    //mio
+    const transitionElement = document.getElementById('card-transition');
+    if (transitionElement) {
+      transitionElement.addEventListener('transitionend', transitionEnd);
+    } else {
+      console.error('No se encuentra el elemento con id card-transition');
+    }
   });
 }
 
@@ -296,9 +326,7 @@ if (nextMoveBtn && nextMoveBtn instanceof HTMLButtonElement) {
   nextMoveBtn.addEventListener('click', () => {
     giveMeCard();
 
-    //no se si activar o no que se actualice el mensaje o poner un mensaje nuevo
-    // const state: States = checkNumber(scoreValue);
-    // showMessage(state);
+    //Sólo permito ver un movimiento más
     btnDisabled('next-move');
   });
 }

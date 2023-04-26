@@ -21,7 +21,7 @@ body {
 img {
   display: block;
   width: 100%;
-  /* un poco guarro pero todas mis imagenes son iguales */
+  /* Borde aquí porque todas mis imagenes son iguales */
   border-radius: 8% / 5%;
 }
 
@@ -70,7 +70,6 @@ button:disabled {
   width: 85%;
   height: 100vh;
   margin: 0 auto;
-  /* padding: 2rem; */
   text-align: center;
   background-color: hsl(120, 31%, 20%);
   color: white;
@@ -84,7 +83,6 @@ button:disabled {
   display: flex;
   gap: var(--gap);
   justify-content: space-between;
-  perspective: 400;
   max-width: 50vh;
   margin-left: auto;
   margin-right: auto;
@@ -119,7 +117,7 @@ button:disabled {
   transition: transform 1.5s ease;
   z-index: 1;
   opacity: 1;
-  /* -180 movimiento más real en solitario. 180 se ve antes la nueva carta, pero la animacion hace algo extraño */
+  /* -180 movimiento más real en solitario zurdo. 180 se ve antes la nueva carta, pero la animacion hace algo extraño */
   transform: translateX(calc(100% + var(--gap))) rotateY(-180deg);
 }
 

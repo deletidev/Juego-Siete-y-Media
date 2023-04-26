@@ -12,6 +12,9 @@ Juego de las Siete y Media, creado con Html5, Css3, y Typescript, con Vite como 
 
 ## ¿Qué he aprendido en este proyecto? 🙇🏻
 
+He aprendido a crear tipos y a usar condicionales en Typescript.
+A tener en cuenta todos los problemas que puede dar el uso de una transición en un componente importante de mi proyecto, y a resolver estos problemas.
+
 ## Tecnologías 🛠
 
 <!-- Iconos sacados de: https://github.com/hendrasob/badges/blob/master/README.md y https://github.com/alexandresanlim/Badges4-README.md-Profile -->
