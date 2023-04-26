@@ -2,8 +2,6 @@
 
 ![Imagen del proyecto](public/img-proyecto.png)
 
-Juego de las Siete y Media, creado con Html5, Css3, y Typescript, con Vite como builder.
-
 ## Ejemplo en vivo
 
 - [Ver página](https://siete-y-media.onrender.com/)
