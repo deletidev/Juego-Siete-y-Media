@@ -41,7 +41,7 @@ button {
   background-color: hsl(69, 100%, 96%);
   color: black;
   cursor: pointer;
-  /* transition: border-color 0.25s; */
+  transition: border-color 0.25s;
   letter-spacing: 0.8px;
   flex: 1;
 }
@@ -160,10 +160,10 @@ button:disabled {
   color: hsl(67, 100%, 69%);
   line-height: 1.2em;
   position: relative;
-  z-index: -1;
+  /* z-index: -1; */
   opacity: 0;
   /* este transition da problemas */
-  /* transition: opacity 0.5s ease-in-out; */
+  transition: opacity 0.5s ease-in-out;
 }
 
 .game__action {
@@ -195,15 +195,5 @@ button:disabled {
 
 .display--opacity {
   opacity: 1;
-  z-index: 1;
+  /* z-index: 1; */
 }
-
-/* @keyframes text-shadow {
-  0% {
-    box-shadow: 0 0px 5px hsla(0, 0%, 100%, 0.7);
-  }
-
-  100% {
-    box-shadow: 0 0px 30px hsla(0, 0%, 100%, 0.7);
-  }
-} */

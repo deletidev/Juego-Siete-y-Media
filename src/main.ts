@@ -80,7 +80,7 @@ const showCard = (num: number) => {
 
 //Mensaje
 // ?comprobar el numero
-const checkNumber = (numero: number) => {
+const checkNumber = (numero: number): States => {
   if (numero < 4) {
     return 'LESS_THAN_FOUR';
   }
@@ -136,9 +136,9 @@ const gameOver = (num: number) => {
   if (num > 7.5) {
     const state: States = checkNumber(scoreValue);
     showMessage(state);
-    mostrarBtnId('new-game');
-    ocultarBtnId('add-card');
-    ocultarBtnId('stand');
+    btnShow('new-game');
+    btnHiden('add-card');
+    btnHiden('stand');
   }
 };
 
@@ -214,22 +214,22 @@ const btnEnabled = (id: string): void => {
 };
 
 //mostrar Boton
-const mostrarBtnId = (id: string): void => {
+const btnShow = (id: string): void => {
   const btn = document.getElementById(id);
   if (btn && btn instanceof HTMLButtonElement) {
     btn.classList.remove('btn--hiden');
   } else {
-    console.error(`mostrarBtnId: No encuentra el <button> con id ${id}`);
+    console.error(`btnShow: No encuentra el <button> con id ${id}`);
   }
 };
 
 //Ocultar Boton
-const ocultarBtnId = (id: string): void => {
+const btnHiden = (id: string): void => {
   const btn = document.getElementById(id);
   if (btn && btn instanceof HTMLButtonElement) {
     btn.classList.add('btn--hiden');
   } else {
-    console.error(`ocultarBtnId: No encuentra el <button> con id ${id}`);
+    console.error(`btnHiden: No encuentra el <button> con id ${id}`);
   }
 };
 
@@ -238,22 +238,22 @@ const stand = () => {
   const state: States = checkNumber(scoreValue);
   showMessage(state);
 
-  mostrarBtnId('new-game');
-  mostrarBtnId('next-move');
-  ocultarBtnId('add-card');
-  ocultarBtnId('stand');
+  btnShow('new-game');
+  btnShow('next-move');
+  btnHiden('add-card');
+  btnHiden('stand');
   if (scoreValue === 7.5) {
-    ocultarBtnId('next-move');
+    btnHiden('next-move');
   }
 };
 
 //Nueva partida
 const newGame = () => {
-  ocultarBtnId('new-game');
-  mostrarBtnId('add-card');
-  mostrarBtnId('stand');
+  btnHiden('new-game');
+  btnShow('add-card');
+  btnShow('stand');
   btnEnabled('next-move');
-  ocultarBtnId('next-move');
+  btnHiden('next-move');
 
   scoreValue = 0;
   showScore();
