@@ -161,6 +161,10 @@ button:disabled {
   transition: opacity 0.5s ease-in-out;
 }
 
+.display__solution--show {
+  opacity: 1;
+}
+
 .game__action {
   --flow: min(3.5vh, 8rem);
   display: flex;
@@ -185,8 +189,4 @@ button:disabled {
 
 .btn--hiden {
   display: none;
-}
-
-.display--opacity {
-  opacity: 1;
 }
