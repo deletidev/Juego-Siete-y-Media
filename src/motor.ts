@@ -1,4 +1,4 @@
-import { States } from './modelo';
+import { States, partida, puntosPartida } from './modelo';
 
 //Numero aleatorio
 export const randomNumber = (min: number, max: number): number =>
@@ -48,28 +48,27 @@ const urlCard = (num: number): string => {
 
 //creo la url de la img
 export const newUrlImgCard = (num: number): string => {
-  let img = '';
-
-  num > 7 ? (img = urlCard(num + 2)) : (img = urlCard(num));
-
-  return img;
+  return num > puntosPartida.SIETE_COPAS ? urlCard(num + 2) : urlCard(num);
 };
 
 //Devuelvo el stado del mensaje
 export const getState = (numero: number): States => {
-  if (numero < 4) {
+  if (numero < puntosPartida.MIN_SCORE) {
     return 'LESS_THAN_FOUR';
   }
-  if (numero >= 4 && numero < 6) {
+  if (numero >= puntosPartida.MIN_SCORE && numero < puntosPartida.SEIS_COPAS) {
     return 'BETWEEN_FOUR_AND_SIX';
   }
-  if (numero >= 6 && numero <= 7) {
+  if (
+    numero >= puntosPartida.SEIS_COPAS &&
+    numero <= puntosPartida.SIETE_COPAS
+  ) {
     return 'BETWEEN_SIX_AND_SEVEN';
   }
-  if (numero === 7.5) {
+  if (numero === puntosPartida.MAX_TOTAL_SCORE) {
     return 'SEVEN_AND_A_HALF';
   }
-  if (numero > 7.5) {
+  if (numero > puntosPartida.MAX_TOTAL_SCORE) {
     return 'GAME_OVER';
   }
   return 'IMPOSIBLE';
@@ -104,4 +103,11 @@ export const generateMessage = (state: States): string => {
   }
 
   return mensaje;
+};
+
+//actualizo puntuación
+export const sumCoins = (newNumber: number) => {
+  newNumber > puntosPartida.SIETE_COPAS
+    ? (partida.scoreValue = partida.scoreValue + 0.5)
+    : (partida.scoreValue = partida.scoreValue + newNumber);
 };

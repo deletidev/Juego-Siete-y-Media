@@ -1,34 +1,40 @@
 import { partida } from './modelo';
+import { giveMeCard, stand, newGame, btnDisabled, showScore } from './ui';
 
-import { showScore, giveMeCard, stand, newGame, btnDisabled } from './ui';
+const initBtns = () => {
+  const addCard = document.getElementById('add-card');
+  const standBtn = document.getElementById('stand');
+  const newGameBtn = document.getElementById('new-game');
+  const nextMoveBtn = document.getElementById('next-move');
 
-document.addEventListener('DOMContentLoaded', () => {
-  //o new game
+  if (addCard && addCard instanceof HTMLButtonElement) {
+    addCard.addEventListener('click', giveMeCard);
+  }
+
+  if (standBtn && standBtn instanceof HTMLButtonElement) {
+    standBtn.addEventListener('click', stand);
+  }
+
+  if (newGameBtn && newGameBtn instanceof HTMLButtonElement) {
+    newGameBtn.addEventListener('click', newGame);
+  }
+
+  if (nextMoveBtn && nextMoveBtn instanceof HTMLButtonElement) {
+    nextMoveBtn.addEventListener('click', () => {
+      giveMeCard();
+
+      //Sólo permito ver un movimiento más
+      btnDisabled('next-move');
+    });
+  }
+};
+
+export const initGame = () => {
+  //Pongo el 0
   showScore(partida.scoreValue);
-});
 
-const addCard = document.getElementById('add-card');
-const standBtn = document.getElementById('stand');
-const newGameBtn = document.getElementById('new-game');
-const nextMoveBtn = document.getElementById('next-move');
+  //Me aseguro de que estén los botones
+  initBtns();
+};
 
-if (addCard && addCard instanceof HTMLButtonElement) {
-  addCard.addEventListener('click', giveMeCard);
-}
-
-if (standBtn && standBtn instanceof HTMLButtonElement) {
-  standBtn.addEventListener('click', stand);
-}
-
-if (newGameBtn && newGameBtn instanceof HTMLButtonElement) {
-  newGameBtn.addEventListener('click', newGame);
-}
-
-if (nextMoveBtn && nextMoveBtn instanceof HTMLButtonElement) {
-  nextMoveBtn.addEventListener('click', () => {
-    giveMeCard();
-
-    //Sólo permito ver un movimiento más
-    btnDisabled('next-move');
-  });
-}
+document.addEventListener('DOMContentLoaded', initGame);
