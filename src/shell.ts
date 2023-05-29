@@ -29,7 +29,7 @@ const initBtns = () => {
   }
 };
 
-export const initGame = () => {
+const initGame = () => {
   //Pongo el 0
   showScore(partida.scoreValue);
 

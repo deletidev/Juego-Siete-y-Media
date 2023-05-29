@@ -1,10 +1,17 @@
-import { partida, puntosPartida } from './modelo';
+import {
+  partida,
+  puntosPartida,
+  setState,
+  setScore,
+  setMessage
+} from './modelo';
+
 import {
   randomNumber,
-  newUrlImgCard,
+  cardNumber,
   getState,
   generateMessage,
-  sumCoins
+  cardValue
 } from './motor';
 
 //apagar boton
@@ -47,6 +54,48 @@ export const showScore = (scoreNumber: number): void => {
     : console.error('showScore: no ha encontrado el elemento con id score');
 };
 
+//CartaUrl
+const urlCard = (num: number): string => {
+  let urlName: string = '';
+  switch (num) {
+    case 1:
+      urlName = '1_as-copas.jpg ';
+      break;
+    case 2:
+      urlName = '2_dos-copas.jpg ';
+      break;
+    case 3:
+      urlName = '3_tres-copas.jpg ';
+      break;
+    case 4:
+      urlName = '4_cuatro-copas.jpg ';
+      break;
+    case 5:
+      urlName = '5_cinco-copas.jpg ';
+      break;
+    case 6:
+      urlName = '6_seis-copas.jpg ';
+      break;
+    case 7:
+      urlName = '7_siete-copas.jpg ';
+      break;
+    case 10:
+      urlName = '10_sota-copas.jpg ';
+      break;
+    case 11:
+      urlName = '11_caballo-copas.jpg ';
+      break;
+    case 12:
+      urlName = '12_rey-copas.jpg ';
+      break;
+    default:
+      break;
+  }
+
+  let url: string = `https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/${urlName}`;
+  return url;
+};
+
 //Actualizo la url de la img de la transicion
 const urlTransitionCard = (img: string): void => {
   const imgCard = document.getElementById('card-new');
@@ -60,24 +109,21 @@ const urlTransitionCard = (img: string): void => {
 const solutionMessage = (menssage: string): void => {
   const solution = document.getElementById('solution');
 
-  if (solution && solution instanceof HTMLElement) {
-    solution.innerHTML = menssage;
-  } else {
-    console.error('showMessage: no encuentra el elemento con id solution');
-  }
+  solution && solution instanceof HTMLElement
+    ? (solution.innerHTML = menssage)
+    : console.error('showMessage: no encuentra el elemento con id solution');
 };
 
 // muestraMensajeDeComprobacion
 const showMessage = (): void => {
   const solution = document.getElementById('solution');
 
-  if (solution && solution instanceof HTMLElement) {
-    solution.classList.add('display__solution--show');
-  } else {
-    console.error('showMessage: no encuentra el elemento con id solution');
-  }
+  solution && solution instanceof HTMLElement
+    ? solution.classList.add('display__solution--show')
+    : console.error('showMessage: no encuentra el elemento con id solution');
 };
 
+//Botones tras comprobar la mano
 const checkHandBtns = () => {
   btnShow('new-game');
   btnHiden('add-card');
@@ -90,8 +136,8 @@ const checkHand = (num: number): void => {
     num === puntosPartida.MAX_TOTAL_SCORE ||
     num > puntosPartida.MAX_TOTAL_SCORE
   ) {
-    partida.state = getState(partida.scoreValue);
-    partida.message = generateMessage(partida.state);
+    setState(getState(partida.scoreValue));
+    setMessage(generateMessage(partida.state));
     solutionMessage(partida.message);
     showMessage();
     checkHandBtns();
@@ -118,24 +164,21 @@ const transitionReset = (): void => {
 const urlTableCard = (img: string): void => {
   const imgCardRes = document.getElementById('card-prev');
 
-  if (imgCardRes && imgCardRes instanceof HTMLImageElement) {
-    imgCardRes.src = img;
-  } else {
-    console.error('No se encuentra el elemento con id card-new o card-prev');
-  }
+  imgCardRes && imgCardRes instanceof HTMLImageElement
+    ? (imgCardRes.src = img)
+    : console.error('No se encuentra el elemento con id card-new o card-prev');
 };
 
 //mostrar carta de abajo
 const showTableCard = (): void => {
   const imgCardRes = document.getElementById('card-prev');
 
-  if (imgCardRes && imgCardRes instanceof HTMLImageElement) {
-    imgCardRes.classList.remove('card--opacity');
-  } else {
-    console.error('No se encuentra el elemento con id card-new o card-prev');
-  }
+  imgCardRes && imgCardRes instanceof HTMLImageElement
+    ? imgCardRes.classList.remove('card--opacity')
+    : console.error('No se encuentra el elemento con id card-new o card-prev');
 };
 
+// botones al terminar la transición
 const transitionEndBtns = () => {
   btnEnabled('add-card');
   btnEnabled('new-game');
@@ -190,10 +233,10 @@ const transitionBtns = () => {
 //Dar carta
 export const giveMeCard = (): void => {
   // creo numero random;
-  let newNumber: number = randomNumber(1, 10);
+  let newNumber: number = cardNumber(randomNumber(1, 10));
 
   //recibo mi URL de la img de la carta
-  let img = newUrlImgCard(newNumber);
+  let img = urlCard(newNumber);
 
   //Veo la carta
   urlTransitionCard(img);
@@ -201,11 +244,14 @@ export const giveMeCard = (): void => {
   //Hago la transición
   transitionAdd();
 
-  //desabilito botones durante la transición
+  //deshabilito botones durante la transición
   transitionBtns();
 
+  //Le doy valor a la carta
+  const newValue = cardValue(newNumber);
+
   //Actualizo puntuación
-  sumCoins(newNumber);
+  setScore(partida.scoreValue + newValue);
 
   //mostrar puntos
   showScore(partida.scoreValue);
@@ -234,8 +280,8 @@ const stateBtns = () => {
 
 // Me planto
 export const stand = (): void => {
-  partida.state = getState(partida.scoreValue);
-  partida.message = generateMessage(partida.state);
+  setState(getState(partida.scoreValue));
+  setMessage(generateMessage(partida.state));
   solutionMessage(partida.message);
   showMessage();
   stateBtns();
@@ -243,11 +289,16 @@ export const stand = (): void => {
 
 //Nueva partida
 export const newGame = (): void => {
+  //Botones inicio partida
   newGameBtns();
 
-  partida.scoreValue = 0;
-  showScore(partida.scoreValue);
+  //reseteo objeto partida
+  setScore(0);
+  setState(getState(partida.scoreValue));
+  setMessage(generateMessage(partida.state));
 
+  //muestro nueva puntuación
+  showScore(partida.scoreValue);
   //Oculto el mensaje
   solutionHide();
 
